@@ -1,0 +1,17 @@
+meta {
+  name: make user
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8081/api/users/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "hessam22"
+  }
+}

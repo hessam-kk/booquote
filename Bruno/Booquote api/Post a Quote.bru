@@ -1,0 +1,19 @@
+meta {
+  name: Post a Quote
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8081/api/quotes/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_uid": "2772fbcc-6901-4953-9b40-b68b100e73a9" ,
+    "book_uid": "51d4bcd9-8afe-42ac-95f0-c58d0ae76cab",
+    "text": "Fear is the mind-killer"
+  }
+}
