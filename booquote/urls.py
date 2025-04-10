@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from quotes.views import mark_book_as_read
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('quotes.urls')),  # API endpoints
+    path('api/users/<str:user_uid>/books/<str:book_uid>/read/', mark_book_as_read, name='mark-book-read'),
+    
 ]

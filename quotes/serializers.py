@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import User, Book, Quote
+from .models import User, Book, Quote, ReadRel
+from datetime import datetime
 
 class UserSerializer(serializers.Serializer):
     uid = serializers.CharField(read_only=True)  # Read-only since it's auto-generated
@@ -63,3 +64,26 @@ class QuoteCreateSerializer(serializers.Serializer):
     user_uid = serializers.CharField()
     book_uid = serializers.CharField()
     text = serializers.CharField(max_length=1000)
+    
+    
+# Serializer for the READ relationship
+class ReadSerializer(serializers.Serializer):
+    date_of_finishing = serializers.DateField()
+    score = serializers.IntegerField(min_value=1, max_value=5)
+    duration_of_reading = serializers.FloatField(min_value=0.0)  # In days
+    notes = serializers.CharField(max_length=500, required=False, allow_blank=True)
+
+    def create(self, validated_data):
+        user_uid = self.context['user_uid']
+        book_uid = self.context['book_uid']
+        user = User.nodes.get(uid=user_uid)
+        book = Book.nodes.get(uid=book_uid)
+
+        # Create or update the READ relationship
+        read_rel = user.read.connect(book, {
+            'date_of_finishing': validated_data['date_of_finishing'],
+            'score': validated_data['score'],
+            'duration_of_reading': validated_data['duration_of_reading'],
+            'notes': validated_data.get('notes', '')
+        })
+        return read_rel
